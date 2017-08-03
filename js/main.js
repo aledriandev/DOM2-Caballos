@@ -146,12 +146,15 @@ sigSolucion.onclick = function(){
             break;
         }
     }
+    var ind=0;
     for (var i = 0; i < n; i++) {
         for (var j = 0; j < n; j++) {
-            var celda=celdas[j];
+            var celda=celdas[ind];   
             var p = document.createElement('p');
             p.innerHTML = M[i][j];
             celda.appendChild(p);
+            console.log(p)
+            ind++;
         }
     }
 
