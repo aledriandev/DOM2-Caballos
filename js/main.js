@@ -1,5 +1,4 @@
 var tablero = document.getElementById('tablero');
-var sigSolucion = document.getElementById('sigSolucion');
 var pasos = document.getElementById('pasos');
 
 function printMatrix (M){
@@ -167,14 +166,8 @@ function solucionM(){
   }
 }
 
-sigSolucion.onclick = function(){
+function sigSolucion(){
   generar();
-  var celdas = document.getElementsByTagName('td');
-  var ind=0;
-  celdas[ind].textContent = "♘"+1;
-}
-
-pasos.onclick = function(){
   var M = matrizSolucion();
   var n = parseInt(document.getElementById('lados').value);
   var celdas = document.getElementsByTagName('td');
@@ -187,4 +180,52 @@ pasos.onclick = function(){
   for (var i = 0; i < n*n; i++) {  
       celdas[i].textContent = "♘"+ linealM[i];
   }
+
+  var negro = document.getElementsByClassName("negro");
+  var blanco = document.getElementsByClassName("blanco");
+
+  for (var i = 0; i < negro.length; i++) {
+    negro[i].style.color = "black";
+  }
+  
+  for (var i = 0; i < blanco.length; i++) {
+    blanco[i].style.color = "white";
+  }
+  /*
+  $(document).ready(function(){
+    $( ".negro" ).css( "color", "black" )
+  $( ".blanco" ).css( "color", "white" )
+  });
+  */
+  return true;
 }
+
+var click=0;
+
+pasos.onclick = function(){
+  click=click+1;
+  console.log(click)
+  var n = parseInt(document.getElementById('lados').value);
+  var celdas = document.getElementsByTagName('td');
+
+  var valCeldas = [];
+  for (var i = 0; i < celdas.length; i++) {
+    valCeldas.push(celdas[i].textContent.substr(1));
+  }
+   
+  var numero = click.toString();
+  var posicion = valCeldas.indexOf(numero);
+  //console.log(posicion);
+  
+  if(celdas[posicion].style.color == "black"){
+    celdas[posicion].style.color = "white";
+  }else{
+    celdas[posicion].style.color = "black";
+  }
+  
+  if(click==n*n){
+    click=0;
+  }
+}
+
+
