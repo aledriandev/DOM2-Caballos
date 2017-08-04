@@ -1,21 +1,20 @@
-var generar = document.getElementById('ejecutar');
 var tablero = document.getElementById('tablero');
 var sigSolucion = document.getElementById('sigSolucion');
 var pasos = document.getElementById('pasos');
 
 function printMatrix (M){
-    console.log ("___________________");
-    for (var i = 0; i < M.length; i++)
-        console.log (M[i]);   
-    console.log ("___________________");
+  console.log ("___________________");
+  for (var i = 0; i < M.length; i++)
+    console.log (M[i]);   
+  console.log ("___________________");
 }
 function check (i, j, n) {
-   if (  i >= 0 && j >= 0 && i < n && j < n)
-       return true;
-   return false;   
+  if (  i >= 0 && j >= 0 && i < n && j < n)
+    return true;
+  return false;   
 }
 function randInt (n) {
-   return Math.floor(Math.random () * n);
+  return Math.floor(Math.random () * n);
 }
 
 
@@ -50,148 +49,142 @@ function shuffleArray(d) {
 };
 
 function use_helper (soluciones, helper) {
-   var pos = -1;
-   var min = 10000;
-   soluciones = shuffleArray (soluciones);
-   for (var i = 0; i < soluciones.length; i++) {
-      var x = soluciones[i].x;
-      var y = soluciones[i].y;      
-      if ( helper[x][y] < min) {
-         min = helper[x][y] ;
-         pos = i;
-      }
-   }
-   return pos;
+  var pos = -1;
+  var min = 10000;
+  soluciones = shuffleArray (soluciones);
+  for (var i = 0; i < soluciones.length; i++) {
+    var x = soluciones[i].x;
+    var y = soluciones[i].y;      
+    if ( helper[x][y] < min) {
+      min = helper[x][y] ;
+      pos = i;
+    }
+  }
+  return pos;
 }
 
 function gen_solution (M, helper, n) {
-    var mov_x = [-2, -1, +1, +2, +2, +1, -1, -2];
-    var mov_y = [-1, -2, -2, -1, +1, +2, +2, +1];    
-    var step = 1;
-    var x = 0; var y = 0;
+  var mov_x = [-2, -1, +1, +2, +2, +1, -1, -2];
+  var mov_y = [-1, -2, -2, -1, +1, +2, +2, +1];    
+  var step = 1;
+  var x = 0; var y = 0;
     
-    M[x][y] = step;
-    while ( true ) {
-        if ( step == n * n) {
-            console.log ('eureka!!!');
-            return true;
-        }
-        var soluciones = [];
-        for (var index = 0; index < mov_x.length; index++) {
-            var i = x + mov_x[index];
-            var j = y + mov_y[index];   
-            if (check (i, j, n) && M [i][j] == 0) {
-               soluciones.push ( {x:i, y:j});
-            }
-        }
-        if (soluciones.length == 0) {
-           console.log ("fail!!");
-           break;
-        }
-        var idx = use_helper (soluciones, helper) ;
-        x =  soluciones[ idx ].x;
-        y =  soluciones[ idx ].y;
-        step++;
-        M[x][y] = step;
-       //console.log ("step: " + step);
-       
+  M[x][y] = step;
+  while ( true ) {
+    if ( step == n * n) {
+      console.log ('eureka!!!');
+      return true;
     }
-    return false;
+    var soluciones = [];
+    for (var index = 0; index < mov_x.length; index++) {
+      var i = x + mov_x[index];
+      var j = y + mov_y[index];   
+      if (check (i, j, n) && M [i][j] == 0) {
+        soluciones.push ( {x:i, y:j});
+      }
+    }
+    if (soluciones.length == 0) {
+      console.log ("fail!!");
+      break;
+    }
+    var idx = use_helper (soluciones, helper) ;
+    x =  soluciones[ idx ].x;
+    y =  soluciones[ idx ].y;
+    step++;
+    M[x][y] = step;  
+  }
+  return false;
 } 
 
 //matriz inicial llena de ceros
 function initMatrix (n) {
-    var matrix = [];
-    for (var i = 0; i < n; i++) {
-        var fila = [];
-        for (var j = 0; j < n; j++) {
-            fila[j] = 0;
-        }
-        matrix[i] = fila;
+  var matrix = [];
+  for (var i = 0; i < n; i++) {
+    var fila = [];
+    for (var j = 0; j < n; j++) {
+      fila[j] = 0;
     }
-    return matrix;
+    matrix[i] = fila;
+  }
+  return matrix;
 }
 
 //genera la tabla
-generar.onclick = function () {
-    tablero.innerHTML = '';
-    var n = parseInt(document.getElementById('lados').value);
+function generar() {
+  tablero.innerHTML = '';
+  var n = parseInt(document.getElementById('lados').value);
     
-    var tabla = document.createElement('table');
-    tabla.border = "1";
-    for (var i = 0; i < n; i++) {
-        var fila = document.createElement('tr');
-        for (var j = 0; j < n; j++) {
-            var celda = document.createElement('td');
-            if (i % 2 == 0 && j % 2 != 0 || i % 2 != 0 && j % 2 == 0) {
-                celda.setAttribute('class', 'negro');
-            }
+  var tabla = document.createElement('table');
+  tabla.border = "1";
+  for (var i = 0; i < n; i++) {
+    var fila = document.createElement('tr');
+    for (var j = 0; j < n; j++) {
+      var celda = document.createElement('td');
+      if (i % 2 == 0 && j % 2 != 0 || i % 2 != 0 && j % 2 == 0) {
+        celda.setAttribute('class', 'negro');
+      }else{
+        celda.setAttribute('class','blanco');
+      }
             
-            fila.appendChild(celda);
-        }
-        tabla.appendChild(fila);
+      fila.appendChild(celda);
     }
-    tablero.appendChild(tabla);
+    tabla.appendChild(fila);
+  }
+  tablero.appendChild(tabla);
 }
 
+//funcion que devuelve la matriz resultado
+function matrizSolucion(){
+  //generar();
+  var n = parseInt(document.getElementById('lados').value);
+  for( var i = 0; i < 1000; i++) {
+    var M = initMatrix (n);
+    var helper = gen_heuristic (n);
+    if (gen_solution (M, helper, n) ) {
+      printMatrix (M);
+    break;
+    }
+  }
+  return M;
+}
+
+
+//funcion que muestra la respuesta en el taalero
+function solucionM(){
+  generar();
+  var M = matrizSolucion();
+  var n = parseInt(document.getElementById('lados').value);
+  var celdas = document.getElementsByTagName('td');
+  var ind=0;
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+      var celda=celdas[ind];   
+      var p = document.createElement('p');
+      p.innerHTML = "♘"+M[i][j];
+      celda.appendChild(p);
+      ind++;
+    }
+  }
+}
 
 sigSolucion.onclick = function(){
-    var n = parseInt(document.getElementById('lados').value);
-    var celdas = document.getElementsByTagName('td');
-    for( var i = 0; i < 1000; i++) {
-        var M = initMatrix (n);
-        var helper = gen_heuristic (n);
-        if (gen_solution (M, helper, n) ) {
-            printMatrix (M);
-            break;
-        }
-    }
-    var ind=0;
-    for (var i = 0; i < n; i++) {
-        for (var j = 0; j < n; j++) {
-            var celda=celdas[ind];   
-            var p = document.createElement('p');
-            p.innerHTML = M[i][j];
-            celda.appendChild(p);
-            console.log(p)
-            ind++;
-        }
-    }
-
+  generar();
+  var celdas = document.getElementsByTagName('td');
+  var ind=0;
+  celdas[ind].textContent = "♘"+1;
 }
 
-var celdas = document.getElementsByTagName('td');
-/*
-generar.onclick = function () {
-    tablero.innerHTML = '';
-    var n = parseInt(document.getElementById('lados').value);
-    
-    for( var i = 0; i < 1000; i++) {
-        var M = initMatrix (n);
-        var helper = gen_heuristic (n);
-        if (gen_solution (M, helper, n) ) {
-            printMatrix (M);
-            break;
-        }
-    }
-    
-    var tabla = document.createElement('table');
-    tabla.border = "1";
-    for (var i = 0; i < n; i++) {
-        var fila = document.createElement('tr');
-        for (var j = 0; j < n; j++) {
-            var celda = document.createElement('td');
-            if (i % 2 == 0 && j % 2 != 0 || i % 2 != 0 && j % 2 == 0) {
-                celda.setAttribute('class', 'negro');
-            }
-            var p = document.createElement('p');
-            p.innerHTML = M[i][j];
-            celda.appendChild(p);
-            
-            fila.appendChild(celda);
-        }
-        tabla.appendChild(fila);
-    }
-    tablero.appendChild(tabla);
+pasos.onclick = function(){
+  var M = matrizSolucion();
+  var n = parseInt(document.getElementById('lados').value);
+  var celdas = document.getElementsByTagName('td');
+  var num = 2;
+  var linealM = [];
+  for (var i = 0; i < n; i++) {
+    linealM = linealM.concat(M[i])
+  }
+  //console.log(linealM)
+  for (var i = 0; i < n*n; i++) {  
+      celdas[i].textContent = "♘"+ linealM[i];
+  }
 }
-*/
