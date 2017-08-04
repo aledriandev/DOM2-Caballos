@@ -167,6 +167,7 @@ function solucionM(){
 }
 
 function sigSolucion(){
+  click=0;
   generar();
   var M = matrizSolucion();
   var n = parseInt(document.getElementById('lados').value);
